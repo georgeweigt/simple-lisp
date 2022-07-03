@@ -7,7 +7,7 @@
 #define MEM 10000000 /* 10,000,000 atoms */
 #define TOS 100000
 #define BUF 1000
-
+#define HASHSIZE 64 /* must be power of 2 */
 #define STRBUF 10000
 
 #define CONS		0
@@ -122,7 +122,7 @@ U *read_expr();
 U *scann();
 U *_sin;
 U *sum;
-U *symtbl[64];
+U *symtbl[HASHSIZE]; /* each entry is symbol list */
 U *t;
 U *_tensor;
 U *_integral_list;
@@ -693,7 +693,7 @@ gc(void)
 
 	/* untag what's used */
 
-	for (i = 0; i < 64; i++)
+	for (i = 0; i < HASHSIZE; i++)
 		untag(symtbl[i]);
 
 	for (i = 0; i < tos; i++)
@@ -1301,7 +1301,7 @@ init(void)
 	nil->u.sym.binding = nil;
 	nil->u.sym.printname = "nil";
 
-	for (i = 0; i < 64; i++)
+	for (i = 0; i < HASHSIZE; i++)
 		symtbl[i] = nil;
 
 	freelist = nil;
@@ -1533,7 +1533,7 @@ symbol(char *s)
 	int x;
 	if (strcmp(s, "nil") == 0)
 		return nil;
-	x = *s & 63;
+	x = *s & (HASHSIZE - 1); /* first char is hash index */
 	p = symtbl[x];
 	while (iscons(p)) {
 		if (strcmp(car(p)->u.sym.printname, s) == 0)
