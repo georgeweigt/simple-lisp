@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MEM 3000000 /* (3,000,000 nodes) * (12 bytes/node) = 36 megabytes */
+#define MEM 10000000 /* 10,000,000 atoms */
 #define TOS 100000
 #define BUF 1000
 
@@ -30,32 +30,30 @@
 #define ZEQUAL		17
 #define ZEVAL		18
 #define ZEXIT		19
-#define ZGC		20
-#define ZGOTO		21
-#define ZGREATERP	22
-#define ZIF		23
-#define ZINTEGERP	24
-#define ZINTEGRAL	25
-#define ZLENGTH		26
-#define ZLESSP		27
-#define ZLIST		28
-#define ZLOAD		29
-#define ZNOT		30
-#define ZNULL		31
-#define ZNUMBERP	32
-#define ZOR		33
-#define ZPOWER		34
-#define ZPRINT		35
-#define ZPRINTCARS	36
-#define ZPRODUCT	37
-#define ZPROG		38
-#define ZQUOTE		39
-#define ZRETURN		40
-#define ZSETQ		41
-#define ZSUM		42
-#define ZSUBST		43
-#define ZTENSOR		44
-#define ZTRANSPOSE	45
+#define ZGOTO		20
+#define ZGREATERP	21
+#define ZIF		22
+#define ZINTEGERP	23
+#define ZINTEGRAL	24
+#define ZLENGTH		25
+#define ZLESSP		26
+#define ZLIST		27
+#define ZNOT		28
+#define ZNULL		29
+#define ZNUMBERP	30
+#define ZOR		31
+#define ZPOWER		32
+#define ZPRINT		33
+#define ZPRINTCARS	34
+#define ZPRODUCT	35
+#define ZPROG		36
+#define ZQUOTE		37
+#define ZRETURN		38
+#define ZSETQ		39
+#define ZSUM		40
+#define ZSUBST		41
+#define ZTENSOR		42
+#define ZTRANSPOSE	43
 
 #define iscons(p) ((p)->k == CONS)
 #define isnum(p) ((p)->k == NUM)
@@ -135,14 +133,11 @@ U *_meta_n;
 U *_meta_x;
 
 FILE *infile;
-
 int tos;
 int tensor_op;
 int index_i;
 int index_j;
-
 char buf[BUF];
-
 int k;
 char strbuf[STRBUF + 1];
 
@@ -168,97 +163,111 @@ int gp[17][17] = {
 	0,0,12,13,14,15,9,10,11,-6,-7,-8,-2,-3,-4,-5,-1,
 };
 
-U *ccons();
-U *num();
-U *str();
-U *sym();
-U *zand();
-U *zappend();
-U *zatom();
-U *zcar();
-U *zcdr();
-U *zcomponent();
-U *zcond();
-U *zcons();
-U *zcontract();
-U *zdefine();
-U *zderivative();
-U *zdot();
-U *zequal();
-U *zeval();
-U *zexit();
-U *zfixp();
-U *zgc();
-U *zgoto();
-U *zgreaterp();
-U *zif();
-U *zintegral();
-U *zlessp();
-U *zlist();
-U *zload();
-U *zlength();
-U *znot();
-U *znull();
-U *znumberp();
-U *zor();
-U *zpower();
-U *zprint();
-U *zprintcars();
-U *zproduct();
-U *zprog();
-U *zquote();
-U *zreturn();
-U *zsetq();
-U *zsum();
-U *zsubst();
-U *ztensor();
-U *ztranspose();
-
-U *alloc();
-U *append();
-U *cons();
-U *contract();
-U *d();
-U *dcos();
-U *dd();
-U *dfunction();
-U *dpower();
-U *dproduct();
-U *dsin();
-U *dsum();
-U *eval();
-U *eval_user_function();
-U *eval_args();
-U *expand(int, int);
-U *inner_expand();
-U *inner_product(U *, U *);
-U *product(int, int);
-U *ksum();
-U *number();
-U *pop();
-U *power();
-void push_factor(U *);
-void push_term(U *);
-U *subst();
-U *symbol();
-U *transpose();
-
-void print(U *);
-void print1(U *);
-void untag(U *);
-void add(int *, int *, int, int);
-void mult(int *, int *, int, int);
-void push(U *);
-void pushvars(U *);
-void popvars(U *);
+int main(int argc, char *argv[]);
+U * eval(U *p);
+U * eval_user_function(U *p);
+U * eval_args(U *p);
+U * zand(U *p);
+U * zappend(U *p);
+U * append(U *p1, U *p2);
+U * zatom(U *p);
+U * zcar(U *p);
+U * zcdr(U *p);
+U * zcomponent(U *p);
+U * zcond(U *p);
+U * zcons(U *p);
+U * cons(U *p1, U *p2);
+U * zcontract(U *p);
+int tindex(U *p);
+U * zdefine(U *p);
+U * zderivative(U *p);
+U * zdot(U *p);
+U * zequal(U *p);
+int equal(U *p1, U *p2);
+U * zeval(U *p);
+U * zexit(U *p);
+U * zfixp(U *p);
+void gc(void);
+void untag(U *p);
+U * zgoto(U *p);
+U * zgreaterp(U *p);
+U * zif(U *p);
+U * zintegral(U *p);
+U * zlessp(U *p);
+int lessp(U *p1, U *p2);
+U * zlist(U *p);
+void load(char *s);
+U * zlength(U *p);
+U * znot(U *p);
+U * znull(U *p);
+U * znumberp(U *p);
+U * zor(U *p);
+U * zprintcars(U *p);
+void add(int *pa, int *pb, int a, int b);
+U * zpower(U *p);
+U * zprint(U *p);
+void print(U *p);
+void print1(U *p);
+U * zproduct(U *p);
+U * zprog(U *p);
+void pushvars(U *p);
+void popvars(U *p);
+U * zquote(U *p);
+U * zreturn(U *p);
+U * zsetq(U *p);
+U * zsubst(U *p);
+U * subst(U *p1, U *p2, U *p3);
+U * zsum(U *p);
+U * ztensor(U *p);
+U * contract(U *p, int i, int j);
+U * transpose(U *p, int i, int j);
+void mult(int *pa, int *pb, int a, int b);
+U * ztranspose(U *p);
 void init(void);
-void load(char *);
-void stop(char *);
-char *sdup(char *);
+void stop(char *s);
+void push(U *p);
+U * pop(void);
+void push_term(U *p);
+void push_factor(U *p);
+U * alloc(void);
+U * number(int a, int b);
+int gcd(int a, int b);
+char * sdup(char *s);
+U * symbol(char *s);
+U * read1(void);
+U * read_expr(int c);
+int read_token(void);
+U * scann(char *s);
+int cmp(const void *a, const void *b);
+int cmp_nib(ST *a, ST *b);
+U * ksum(int n);
+U * product(int inner, int n);
+void prep_exponents(int n);
+U * expand(int inner, int n);
+U * power(void);
+U * d(U *p, U *dx);
+U * dsum(U *p, U *dx);
+U * dproduct(U *p, U *dx);
+U * dpower(U *p, U *dx);
+U * dd(U *p, U *dx2);
+U * dfunction(U *p, U *dx);
+U * dsin(U *p, U *dx);
+U * dcos(U *p, U *dx);
+U * inner_product(U *p1, U *p2);
+void integral(void);
+void integral_of_constant(void);
+void integral_of_sum(void);
+void integral_of_product(void);
+void integral_of_nub(void);
+int depends_on_x(U *p);
+int does_not_depend_on_x(U *p);
+int findx(U *p);
+int findf(U *p);
+void deconstruct(U *p);
+int match(U *p, U *l, int h);
 
-main(argc, argv)
-int argc;
-char *argv[];
+int
+main(int argc, char *argv[])
 {
 	int i;
 	U *p;
@@ -268,7 +277,7 @@ char *argv[];
 	for (i = 1; i < argc; i++)
 		load(argv[i]);
 	for (;;) {
-		printf("> ");
+		printf("? ");
 		p = read1();
 		push(p); /* save from gc */
 		p = eval(p);
@@ -276,15 +285,15 @@ char *argv[];
 		if (p != nothing)
 			print(p);
 		if (tos) {
-			tos = 0;
 			printf("stack error\n");
+			exit(1);
 		}
 	}
+	return 0;
 }
 
 U *
-eval(p)
-U *p;
+eval(U *p)
 {
 	if (p->k == SYM)
 		return p->u.sym.binding; /* symbol's binding */
@@ -309,7 +318,6 @@ U *p;
 	case ZEQUAL:		return zequal(p);
 	case ZEVAL:		return zeval(p);
 	case ZEXIT:		return zexit(p);
-	case ZGC:		return zgc(p);
 	case ZGOTO:		return zgoto(p);
 	case ZGREATERP:		return zgreaterp(p);
 	case ZIF:		return zif(p);
@@ -318,7 +326,6 @@ U *p;
 	case ZLENGTH:           return zlength(p);
 	case ZLESSP:		return zlessp(p);
 	case ZLIST:		return zlist(p);
-	case ZLOAD:		return zload(p);
 	case ZNOT:		return znot(p);
 	case ZNULL:		return znull(p);
 	case ZNUMBERP:		return znumberp(p);
@@ -340,8 +347,7 @@ U *p;
 }
 
 U *
-eval_user_function(p)
-U *p;
+eval_user_function(U *p)
 {
 	U *q;
 
@@ -397,8 +403,7 @@ U *p;
 }
 
 U *
-eval_args(p)
-U *p;
+eval_args(U *p)
 {
 	int i, n = 0;
 	while (iscons(p)) {
@@ -414,8 +419,7 @@ U *p;
 }
 
 U *
-zand(p)
-U *p;
+zand(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -427,8 +431,7 @@ U *p;
 }
 
 U *
-zappend(p)
-U *p;
+zappend(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -440,8 +443,7 @@ U *p;
 }
 
 U *
-append(p1, p2)
-U *p1, *p2;
+append(U *p1, U *p2)
 {
 	int i, n = 0;
 	while (iscons(p1)) {
@@ -456,8 +458,7 @@ U *p1, *p2;
 }
 
 U *
-zatom(p)
-U *p;
+zatom(U *p)
 {
 	p = eval(arg1(p));
 	if (iscons(p))
@@ -467,22 +468,19 @@ U *p;
 }
 
 U *
-zcar(p)
-U *p;
+zcar(U *p)
 {
 	return car(eval(arg1(p)));
 }
 
 U *
-zcdr(p)
-U *p;
+zcdr(U *p)
 {
 	return cdr(eval(arg1(p)));
 }
 
 U *
-zcomponent(p)
-U *p;
+zcomponent(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -499,8 +497,7 @@ U *p;
 }
 
 U *
-zcond(p)
-U *p;
+zcond(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -512,8 +509,7 @@ U *p;
 }
 
 U *
-zcons(p)
-U *p;
+zcons(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -524,8 +520,7 @@ U *p;
 }
 
 U *
-cons(p1, p2)
-U *p1, *p2;
+cons(U *p1, U *p2)
 {
 	U *p;
 	if (freelist == nil) {
@@ -545,8 +540,7 @@ U *p1, *p2;
 }
 
 U *
-zcontract(p)
-U *p;
+zcontract(U *p)
 {
 	int i, j;
 	i = tindex(eval(arg1(p)));
@@ -564,8 +558,8 @@ U *p;
 	return p;
 }
 
-tindex(p)
-U *p;
+int
+tindex(U *p)
 {
 	if (isnum(p) && p->A > 0 && p->B == 1)
 		return p->A;
@@ -576,8 +570,7 @@ U *p;
 /* just like setq except arg2 is not evaluated */
 
 U *
-zdefine(p)
-U *p;
+zdefine(U *p)
 {
 	U *p1, *p2;
 	p1 = arg1(p);
@@ -588,8 +581,7 @@ U *p;
 }
 
 U *
-zderivative(p)
-U *p;
+zderivative(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -602,8 +594,7 @@ U *p;
 }
 
 U *
-zdot(p)
-U *p;
+zdot(U *p)
 {
 	int h = tos;
 	p = cdr(p);
@@ -615,8 +606,7 @@ U *p;
 }
 
 U *
-zequal(p)
-U *p;
+zequal(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -629,8 +619,8 @@ U *p;
 		return nil;
 }
 
-equal(p1, p2)
-U *p1, *p2;
+int
+equal(U *p1, U *p2)
 {
 	if (p1 == p2)
 		return 1;
@@ -663,8 +653,7 @@ U *p1, *p2;
 }
 
 U *
-zeval(p)
-U *p;
+zeval(U *p)
 {
 	p = eval(arg1(p));
 	push(p);
@@ -674,8 +663,7 @@ U *p;
 }
 
 U *
-zexit(p)
-U *p;
+zexit(U *p)
 {
 	(void) p;
 	exit(1);
@@ -683,8 +671,7 @@ U *p;
 }
 
 U *
-zfixp(p)
-U *p;
+zfixp(U *p)
 {
 	p = eval(arg1(p));
 	if (p->k == NUM && p->u.num.b == 1)
@@ -693,15 +680,10 @@ U *p;
 		return nil;
 }
 
-U *
-zgc()
+void
+gc(void)
 {
-	return number(gc(), 1);
-}
-
-gc()
-{
-	int i, n = 0;
+	int i;
 
 	/* tag everything */
 
@@ -723,15 +705,11 @@ gc()
 		if (mem[i].tag) {
 			mem[i].u.cons.cdr = freelist;
 			freelist = mem + i;
-			n++;
 		}
-
-	return n;
 }
 
 void
-untag(p)
-U *p;
+untag(U *p)
 {
 	while (iscons(p) && p->tag) {
 		p->tag = 0;
@@ -746,15 +724,13 @@ U *p;
 }
 
 U *
-zgoto(p)
-U *p;
+zgoto(U *p)
 {
 	return p;
 }
 
 U *
-zgreaterp(p)
-U *p;
+zgreaterp(U *p)
 {
 
 	U *p1, *p2;
@@ -769,8 +745,7 @@ U *p;
 }
 
 U *
-zif(p)
-U *p;
+zif(U *p)
 {
 	if (eval(arg1(p)) == nil)
 		return eval(arg3(p));
@@ -781,8 +756,7 @@ U *p;
 /* example: p = (integral (power x 2) x) */
 
 U *
-zintegral(p)
-U *p;
+zintegral(U *p)
 {
 	push(eval(arg1(p)));
 	push(eval(arg2(p)));
@@ -791,8 +765,7 @@ U *p;
 }
 
 U *
-zlessp(p)
-U *p;
+zlessp(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -805,8 +778,8 @@ U *p;
 		return nil;
 }
 
-lessp(p1, p2)
-U *p1, *p2;
+int
+lessp(U *p1, U *p2)
 {
 	if (p1 == p2)
 		return 0;
@@ -817,11 +790,12 @@ U *p1, *p2;
 	if (p2 == nil)
 		return 0;
 
-	if (isnum(p1) && isnum(p2))
+	if (isnum(p1) && isnum(p2)) {
 		if (p1->A * p2->B < p2->A * p1->B)
 			return 1;
 		else
 			return 0;
+	}
 
 	if (isnum(p1))
 		return 1;
@@ -829,11 +803,12 @@ U *p1, *p2;
 	if (isnum(p2))
 		return 0;
 
-	if (isstr(p1) && isstr(p2))
+	if (isstr(p1) && isstr(p2)) {
 		if (strcmp(p1->u.str, p2->u.str) < 0)
 			return 1;
 		else
 			return 0;
+	}
 
 	if (isstr(p1))
 		return 1;
@@ -841,11 +816,12 @@ U *p1, *p2;
 	if (isstr(p2))
 		return 0;
 
-	if (issym(p1) && issym(p2))
+	if (issym(p1) && issym(p2)) {
 		if (strcmp(p1->u.sym.printname, p2->u.sym.printname) < 0)
 			return 1;
 		else
 			return 0;
+	}
 
 	if (issym(p1))
 		return 1;
@@ -865,8 +841,7 @@ U *p1, *p2;
 }
 
 U *
-zlist(p)
-U *p;
+zlist(U *p)
 {
 	int i, n = 0;
 	p = cdr(p);
@@ -883,8 +858,7 @@ U *p;
 }
 
 U *
-zload(p)
-U *p;
+zload(U *p)
 {
 	p = eval(arg1(p));
 	if (isstr(p))
@@ -895,8 +869,7 @@ U *p;
 }
 
 void
-load(s)
-char *s;
+load(char *s)
 {
 	U *p;
 	FILE *f = infile;
@@ -910,19 +883,18 @@ char *s;
 		p = read1();
 		if (p == eof)
 			break;
-		push(p);
+		push(p); /* save from gc */
 		p = eval(p);
+		pop();
 		if (p != nothing)
 			print(p);
-		pop();
 	}
 	fclose(infile);
 	infile = f;
 }
 
 U *
-zlength(p)
-U *p;
+zlength(U *p)
 {
 	int n = 0;
 	p = eval(arg1(p));
@@ -934,8 +906,7 @@ U *p;
 }
 
 U *
-znot(p)
-U *p;
+znot(U *p)
 {
 	if (eval(arg1(p)) == nil)
 		return t;
@@ -944,8 +915,7 @@ U *p;
 }
 
 U *
-znull(p)
-U *p;
+znull(U *p)
 {
 	if (eval(arg1(p)) == nil)
 		return t;
@@ -954,8 +924,7 @@ U *p;
 }
 
 U *
-znumberp(p)
-U *p;
+znumberp(U *p)
 {
 	p = eval(arg1(p));
 	if (isnum(p))
@@ -965,8 +934,7 @@ U *p;
 }
 
 U *
-zor(p)
-U *p;
+zor(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -978,8 +946,7 @@ U *p;
 }
 
 U *
-zprintcars(p)
-U *p;
+zprintcars(U *p)
 {
 	p = eval(arg1(p));
 	while (iscons(p)) {
@@ -990,8 +957,7 @@ U *p;
 }
 
 void
-add(pa, pb, a, b)
-int *pa, *pb, a, b;
+add(int *pa, int *pb, int a, int b)
 {
 	int k;
 	a = *pa * b + *pb * a;
@@ -1004,8 +970,7 @@ int *pa, *pb, a, b;
 }
 
 U *
-zpower(p)
-U *p;
+zpower(U *p)
 {
 	push(eval(arg1(p)));
 	push(eval(arg2(p)));
@@ -1013,8 +978,7 @@ U *p;
 }
 
 U *
-zprint(p)
-U *p;
+zprint(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -1026,16 +990,14 @@ U *p;
 }
 
 void
-print(p)
-U *p;
+print(U *p)
 {
 	print1(p);
 	printf("\n");
 }
 
 void
-print1(p)
-U *p;
+print1(U *p)
 {
 	static char buf[100];
 	switch (p->k) {
@@ -1070,8 +1032,7 @@ U *p;
 }
 
 U *
-zproduct(p)
-U *p;
+zproduct(U *p)
 {
 	int h = tos;
 	p = cdr(p);
@@ -1083,8 +1044,7 @@ U *p;
 }
 
 U *
-zprog(p)
-U *p;
+zprog(U *p)
 {
 	U *p1, *p2;
 
@@ -1117,8 +1077,7 @@ U *p;
 }
 
 void
-pushvars(p)
-U *p;
+pushvars(U *p)
 {
 	while (iscons(p)) {
 		if (issym(car(p)))
@@ -1128,8 +1087,7 @@ U *p;
 }
 
 void
-popvars(p)
-U *p;
+popvars(U *p)
 {
 	if (iscons(p)) {
 		popvars(cdr(p));
@@ -1139,22 +1097,19 @@ U *p;
 }
 
 U *
-zquote(p)
-U *p;
+zquote(U *p)
 {
 	return arg1(p);
 }
 
 U *
-zreturn(p)
-U *p;
+zreturn(U *p)
 {
 	return p;
 }
 
 U *
-zsetq(p)
-U *p;
+zsetq(U *p)
 {
 	U *p1, *p2;
 	p1 = arg1(p);
@@ -1165,8 +1120,7 @@ U *p;
 }
 
 U *
-zsubst(p)
-U *p;
+zsubst(U *p)
 {
 	U *p1, *p2, *p3;
 
@@ -1191,8 +1145,7 @@ U *p;
 /* substitute p1 for p2 in p3 */
 
 U *
-subst(p1, p2, p3)
-U *p1, *p2, *p3;
+subst(U *p1, U *p2, U *p3)
 {
 	U *p4, *p5;
 	if (equal(p2, p3))
@@ -1208,8 +1161,7 @@ U *p1, *p2, *p3;
 }
 
 U *
-zsum(p)
-U *p;
+zsum(U *p)
 {
 	int h = tos;
 	p = cdr(p);
@@ -1221,8 +1173,7 @@ U *p;
 }
 
 U *
-ztensor(p)
-U *p;
+ztensor(U *p)
 {
 	switch (tensor_op) {
 	default:
@@ -1240,9 +1191,7 @@ U *p;
 }
 
 U *
-contract(p, i, j)
-U *p;
-int i, j;
+contract(U *p, int i, int j)
 {
 	U *p1;
 	int k, n;
@@ -1276,9 +1225,7 @@ int i, j;
 }
 
 U *
-transpose(p, i, j)
-U *p;
-int i, j;
+transpose(U *p, int i, int j)
 {
 	U *p1;
 	int k, n;
@@ -1308,8 +1255,7 @@ int i, j;
 }
 
 void
-mult(pa, pb, a, b)
-int *pa, *pb, a, b;
+mult(int *pa, int *pb, int a, int b)
 {
 	int k;
 	a *= *pa;
@@ -1322,8 +1268,7 @@ int *pa, *pb, a, b;
 }
 
 U *
-ztranspose(p)
-U *p;
+ztranspose(U *p)
 {
 	int i, j;
 	i = tindex(eval(arg1(p)));
@@ -1342,7 +1287,7 @@ U *p;
 }
 
 void
-init()
+init(void)
 {
 	int i;
 
@@ -1375,7 +1320,6 @@ init()
 	symbol("equal")		->k = ZEQUAL;
 	symbol("eval")		->k = ZEVAL;
 	symbol("exit")		->k = ZEXIT;
-	symbol("gc")		->k = ZGC;
 	symbol("goto")		->k = ZGOTO;
 	symbol("greaterp")	->k = ZGREATERP;
 	symbol("if")		->k = ZIF;
@@ -1383,8 +1327,6 @@ init()
 	symbol("integral")	->k = ZINTEGRAL;
 	symbol("lessp")		->k = ZLESSP;
 	symbol("list")		->k = ZLIST;
-	symbol("load")		->k = ZLOAD;
-	symbol("run")		->k = ZLOAD;
 	symbol("length")	->k = ZLENGTH;
 	symbol("not")		->k = ZNOT;
 	symbol("null")		->k = ZNULL;
@@ -1475,8 +1417,7 @@ stop(char *s)
 /* the temp stack keeps intermediate results from garbage collection */
 
 void
-push(p)
-U *p;
+push(U *p)
 {
 	if (tos == TOS)
 		stop("stack overflow");
@@ -1484,7 +1425,7 @@ U *p;
 }
 
 U *
-pop()
+pop(void)
 {
 	if (tos == 0)
 		stop("stack underflow");
@@ -1492,8 +1433,7 @@ pop()
 }
 
 void
-push_term(p)
-U *p;
+push_term(U *p)
 {
 	if (car(p) == sum) {
 		p = cdr(p);
@@ -1506,8 +1446,7 @@ U *p;
 }
 
 void
-push_factor(p)
-U *p;
+push_factor(U *p)
 {
 	if (car(p) == _product) {
 		p = cdr(p);
@@ -1520,7 +1459,7 @@ U *p;
 }
 
 U *
-alloc()
+alloc(void)
 {
 	U *p;
 	if (freelist == nil) {
@@ -1534,8 +1473,7 @@ alloc()
 }
 
 U *
-number(a, b)
-int a, b;
+number(int a, int b)
 {
 	int k;
 	U *p;
@@ -1549,8 +1487,8 @@ int a, b;
 	return p;
 }
 
-gcd(a, b)
-int a, b;
+int
+gcd(int a, int b)
 {
 	int k, sign;
 	if (b == 0)
@@ -1586,8 +1524,7 @@ sdup(char *s)
 }
 
 U *
-symbol(s)
-char *s;
+symbol(char *s)
 {
 	U *p;
 	int x;
@@ -1610,14 +1547,13 @@ char *s;
 }
 
 U *
-read1()
+read1(void)
 {
 	return read_expr(read_token());
 }
 
 U *
-read_expr(c)
-int c;
+read_expr(int c)
 {
 	int i, n;
 	U *p;
@@ -1679,7 +1615,8 @@ int c;
 	}
 }
 
-read_token()
+int
+read_token(void)
 {
 	int c, i;
 
@@ -1745,8 +1682,7 @@ read_token()
 }
 
 U *
-scann(s)
-char *s;
+scann(char *s)
 {
 	int a, b, sgn;
 
@@ -1788,8 +1724,14 @@ char *s;
 	return number(sgn * a, b);
 }
 
-cmp(a, b)
-ST *a, *b;
+int
+cmp(const void *a, const void *b)
+{
+	return cmp_nib((ST *) a, (ST *) b);
+}
+
+int
+cmp_nib(ST *a, ST *b)
 {
 	if (equal(a->p, b->p))
 		return 0;
@@ -1800,8 +1742,7 @@ ST *a, *b;
 }
 
 U *
-ksum(n)
-int n;
+ksum(int n)
 {
 	int a, b, i, j;
 	U *p, *q;
@@ -1927,8 +1868,7 @@ int n;
 }
 
 U *
-product(inner, n)
-int inner, n;
+product(int inner, int n)
 {
 	int a, b, flag, g, i, j, x;
 	U *p, *q;
@@ -2166,7 +2106,8 @@ x = (power a (product 3 b c))
 
 */
 
-prep_exponents(n)
+void
+prep_exponents(int n)
 {
 	int i;
 	U *p, *q;
@@ -2196,8 +2137,7 @@ prep_exponents(n)
 }
 
 U *
-expand(inner, n)
-int inner, n;
+expand(int inner, int n)
 {
 	U *p;
 	int h, h1, h2, i, j, k, m;
@@ -2251,7 +2191,7 @@ int inner, n;
 }
 
 U *
-power()
+power(void)
 {
 	int a, b, h, i, n;
 	U *p1, *p2;
@@ -2361,8 +2301,7 @@ power()
 }
 
 U *
-d(p, dx)
-U *p, *dx;
+d(U *p, U *dx)
 {
 	// for example, (derivative x x) is 1
 
@@ -2396,8 +2335,7 @@ U *p, *dx;
 }
 
 U *
-dsum(p, dx)
-U *p, *dx;
+dsum(U *p, U *dx)
 {
 	int h = tos;
 	p = cdr(p);
@@ -2409,8 +2347,7 @@ U *p, *dx;
 }
 
 U *
-dproduct(p, dx)
-U *p, *dx;
+dproduct(U *p, U *dx)
 {
 	int h1, h2, i, j, n = 0;
 	U *p1;
@@ -2436,8 +2373,7 @@ U *p, *dx;
 }
 
 U *
-dpower(p, dx)
-U *p, *dx;
+dpower(U *p, U *dx)
 {
 	int h = tos;
 	U *base, *exponent;
@@ -2464,8 +2400,7 @@ U *p, *dx;
 /* derivative of derivative */
 
 U *
-dd(p, dx2)
-U *p, *dx2;
+dd(U *p, U *dx2)
 {
 	U *dx1;
 	dx1 = caddr(p);
@@ -2494,8 +2429,7 @@ U *p, *dx2;
 /* derivative of a generic function */
 
 U *
-dfunction(p, dx)
-U *p, *dx;
+dfunction(U *p, U *dx)
 {
 	U *t;
 
@@ -2518,8 +2452,7 @@ U *p, *dx;
 }
 
 U *
-dsin(p, dx)
-U *p, *dx;
+dsin(U *p, U *dx)
 {
 	int h = tos;
 	push_factor(d(cadr(p), dx));
@@ -2528,8 +2461,7 @@ U *p, *dx;
 }
 
 U *
-dcos(p, dx)
-U *p, *dx;
+dcos(U *p, U *dx)
 {
 	int h = tos;
 	push(number(-1, 1));
@@ -2555,8 +2487,7 @@ U *p, *dx;
 */
 
 U *
-inner_product(p1, p2)
-U *p1, *p2;
+inner_product(U *p1, U *p2)
 {
 	int i, n = 0;
 	while (iscons(p1)) {
@@ -2581,7 +2512,8 @@ U *p1, *p2;
 #define a (_meta_a->u.sym.binding)
 #define n (_meta_n->u.sym.binding)
 
-integral()
+void
+integral(void)
 {
 	U *tmp1, *tmp2;
 
@@ -2615,14 +2547,16 @@ integral()
 	push(tmp1);
 }
 
-integral_of_constant()
+void
+integral_of_constant(void)
 {
 	push(f);
 	push(x);
 	push(product(0, 2));
 }
 
-integral_of_sum()
+void
+integral_of_sum(void)
 {
 	int h;
 	U *p;
@@ -2643,7 +2577,8 @@ integral_of_sum()
 	push(p);
 }
 
-integral_of_product()
+void
+integral_of_product(void)
 {
 	int h1, h2;
 	U *p;
@@ -2682,7 +2617,8 @@ integral_of_product()
 	push(product(0, tos - h1));
 }
 
-integral_of_nub()
+void
+integral_of_nub(void)
 {
 	int h;
 	U *p;
@@ -2712,8 +2648,8 @@ integral_of_nub()
 	push(p);
 }
 
-depends_on_x(p)
-U *p;
+int
+depends_on_x(U *p)
 {
 	if (findx(p) || findf(p))
 		return 1;
@@ -2721,8 +2657,8 @@ U *p;
 		return 0;
 }
 
-does_not_depend_on_x(p)
-U *p;
+int
+does_not_depend_on_x(U *p)
 {
 	if (findx(p) || findf(p))
 		return 0;
@@ -2732,8 +2668,8 @@ U *p;
 
 /* yes if dx somewhere in p */
 
-findx(p)
-U *p;
+int
+findx(U *p)
 {
 	if (p == x)
 		return 1;
@@ -2747,8 +2683,8 @@ U *p;
 
 /* yes if anonymous function somewhere in p, i.e. p = (sum (f) 1) */
 
-findf(p)
-U *p;
+int
+findf(U *p)
 {
 	if (iscons(p) && car(p)->k == SYM && cdar(p) == nil)
 		return 1;
@@ -2762,8 +2698,8 @@ U *p;
 
 /* push constant expressions */
 
-deconstruct(p)
-U *p;
+void
+deconstruct(U *p)
 {
 	int h;
 	U *q;
@@ -2811,9 +2747,8 @@ U *p;
 	Juggle the constant expressions to try and match f and p.
 */
 
-match(p, l, h)
-U *p, *l;
-int h;
+int
+match(U *p, U *l, int h)
 {
 	int j1, j2;
 	U *q;
