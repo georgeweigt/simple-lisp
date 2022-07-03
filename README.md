@@ -2,7 +2,7 @@ To build and run
 
 ```
 make
-./simple-lisp
+./lisp
 ```
 
 Press ctrl-C to exit.
@@ -10,11 +10,11 @@ Press ctrl-C to exit.
 To run a lisp program
 
 ```
-./simple-lisp filename
+./lisp filename
 ```
 
 Example
 
 ```
-./simple-lisp qed.lisp
+./lisp qed.lisp
 ```

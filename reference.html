@@ -246,20 +246,6 @@ Control-C also does this.
 </pre>
 
 <p>
-<h1>gc</h1>
-
-<p>
-Normally, garbage collection occurs when simple lisp runs
-out of memory.
-The gc function causes garbage collection to occur immediately.
-It returns the number of free cells, 1 cell = 12 bytes.
-
-<pre>
-     > (gc)
-     496053
-</pre>
-
-<p>
 <h1>goto</h1>
 
 <pre>
@@ -514,18 +500,6 @@ An apostrophe does the same thing.
      > (define foo (prog () (return "hello")))
      > (foo)
      hello
-</pre>
-
-<p>
-<h1>run</h1>
-
-<p>
-The "run" function evaluates the expressions in a file.
-
-<pre>
-     > (run "example1")
-     E=K+V for psi5?
-     t
 </pre>
 
 <p>

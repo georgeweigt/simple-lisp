@@ -1,4 +1,4 @@
-; simple-lisp reads this file on startup
+; lisp reads this file on startup
 
 (define minus (product -1 arg))
 (define sqrt (power arg 1/2))

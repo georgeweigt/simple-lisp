@@ -274,7 +274,7 @@ main(int argc, char *argv[])
 	U *p;
 	infile = stdin;
 	init();
-	load("startup.lisp");
+	load("init.lisp");
 	for (i = 1; i < argc; i++)
 		load(argv[i]);
 	for (;;) {
