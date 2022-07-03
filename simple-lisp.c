@@ -140,6 +140,7 @@ int index_j;
 char buf[BUF];
 int k;
 char strbuf[STRBUF + 1];
+int alloc_count;
 
 /* gamma product matrix */
 
@@ -277,17 +278,17 @@ main(int argc, char *argv[])
 	for (i = 1; i < argc; i++)
 		load(argv[i]);
 	for (;;) {
+		if (alloc_count > MEM / 100) {
+			gc();
+			alloc_count = 0;
+		}
 		printf("? ");
 		p = read1();
-		push(p); /* save from gc */
 		p = eval(p);
-		pop();
 		if (p != nothing)
 			print(p);
-		if (tos) {
-			printf("stack error\n");
-			exit(1);
-		}
+		if (tos)
+			stop("stack\n");
 	}
 	return 0;
 }
@@ -880,14 +881,18 @@ load(char *s)
 		return;
 	}
 	for (;;) {
+		if (alloc_count > MEM / 100) {
+			gc();
+			alloc_count = 0;
+		}
 		p = read1();
 		if (p == eof)
 			break;
-		push(p); /* save from gc */
 		p = eval(p);
-		pop();
 		if (p != nothing)
 			print(p);
+		if (tos)
+			stop("stack");
 	}
 	fclose(infile);
 	infile = f;
@@ -1462,13 +1467,11 @@ U *
 alloc(void)
 {
 	U *p;
-	if (freelist == nil) {
-		gc();
-		if (freelist == nil)
-			stop("out of memory");
-	}
+	if (freelist == nil)
+		stop("out of memory");
 	p = freelist;
 	freelist = freelist->u.cons.cdr;
+	alloc_count++;
 	return p;
 }
 
