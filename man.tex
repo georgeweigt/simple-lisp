@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{amsmath}
+\parindent=0pt
+\begin{document}
+
+\begin{center}
+\begin{tabular}{lll}
+& Math & Lisp
+\\[1ex]
+Addition & $a+b+c$ & \verb$(sum a b c)$
+\\[1ex]
+Subtraction & $a-b$ & \verb$(sum a (minus b))$
+\\[1ex]
+Multiplication & $abc$ & \verb$(product a b c)$
+\\[1ex]
+Division & $a/b$ & \verb$(product a (inv b))$
+\\[1ex]
+Power & $a^b$ & \verb$(power a b)$
+\\[1ex]
+Component & $A^1{}_2$ & \verb$(product A12 (tensor 1 2))$
+\end{tabular}
+\end{center}
+
+\section*{Symbolic expressions}
+
+Products of sums are expanded.
+\begin{verbatim}
+? (product a (sum b c))
+(sum (product a b) (product a c))
+
+? (power (sum a b) 2)
+(sum (power a 2) (power b 2) (product 2 a b))
+\end{verbatim}
+
+Sums in an exponent are expanded.
+\begin{verbatim}
+? (power a (sum b c))
+(product (power a b) (power a c))
+\end{verbatim}
+
+Vectors, matrices, and tensors are written as sums of components.
+
+\bigskip
+The following example computes the inner product of two vectors $A$ and $B$.
+\begin{equation*}
+A=\begin{pmatrix}A_1\\A_2\end{pmatrix},
+\quad
+B=\begin{pmatrix}B_1\\B_2\end{pmatrix},
+\quad
+A\cdot B=A_1B_1+A_2B_2
+\end{equation*}
+\begin{verbatim}
+? (setq A (sum (product A1 (tensor 1)) (product A2 (tensor 2))))
+? (setq B (sum (product B1 (tensor 1)) (product B2 (tensor 2))))
+? (dot A B)
+(sum (product A1 B1) (product A2 B2))
+\end{verbatim}
+
+Tensor components can use symbolic indices.
+The following example is the same as above except $x$ and $y$ are used for the index names.
+\begin{verbatim}
+? (setq A (sum (product A1 (tensor x)) (product A2 (tensor y))))
+? (setq B (sum (product B1 (tensor x)) (product B2 (tensor y))))
+? (dot A B)
+(sum (product A1 B1) (product A2 B2))
+\end{verbatim}
+
+\end{document}

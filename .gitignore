@@ -1,2 +1,6 @@
 *.swp
 lisp
+man.aux
+man.log
+man.pdf
+man.synctex.gz
