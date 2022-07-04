@@ -12,4 +12,4 @@ man.pdf: man.tex
 	rm -f man.aux man.log
 
 clean:
-	rm -f lisp man.pdf man.aux man.log man.synctex.gz
+	rm -f lisp man.pdf
