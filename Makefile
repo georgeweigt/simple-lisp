@@ -1,7 +1,7 @@
 .PHONY: clean
 
 lisp: lisp.c
-	gcc -O0 -o lisp lisp.c -lm
+	gcc -O0 -o lisp lisp.c
 
 clean:
 	rm -f lisp
