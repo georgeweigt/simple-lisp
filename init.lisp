@@ -1,7 +1,7 @@
 ; lisp reads this file on startup
 
 (define minus (product -1 arg))
-(define inv (power arg -1))
+(define oneover (power arg -1))
 (define sqrt (power arg 1/2))
 (define exp (power e arg))
 (define complex (sum arg1 (product i arg2)))
