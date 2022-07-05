@@ -1,3 +1,5 @@
+[Simple Lisp Manual](https://georgeweigt.github.io/simple-lisp.pdf)
+
 To build and run
 
 ```

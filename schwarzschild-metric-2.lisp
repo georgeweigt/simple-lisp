@@ -1,6 +1,4 @@
-; does not use (gr) function
-
-; (define xi (sum 1 (product -2 M (power r -1))))
+"Does Einstein tensor for Schwarzschild metric vanish?"
 
 ; metric tensor
 
@@ -63,4 +61,12 @@
 
 (setq GDD (sum RDD (product -1/2 gdd R)))
 
-GDD
+; cancel denominators
+
+(setq G (product GDD r (power r 2) (xi r) (power (xi r) 2)))
+
+(define xi (sum 1 (product -2 M (power r -1))))
+
+(setq G (eval G)) ; evaluate with new xi
+
+(cond ((zerop G) "yes") (t "no"))
