@@ -94,15 +94,15 @@ g_{\mu\nu}=\begin{pmatrix}
 ))
 \end{verbatim}
 
-Compute $g^{\mu\nu}=g_{\mu\nu}^{-1}$.
+Calculate $g^{\mu\nu}=(g_{\mu\nu})^{-1}$.
 \begin{verbatim}
 (setq g (determinant gdd t r theta phi))
 (setq guu (product (power g -1) (adjunct gdd t r theta phi)))
 \end{verbatim}
 
-Compute connection coefficients.
+Calculate connection coefficients.
 \begin{equation*}
-\Gamma_{\mu\beta\gamma}=\frac{1}{2}
+\Gamma^\alpha{}_{\beta\gamma}=\frac{1}{2}g^{\alpha\mu}
 (g_{\mu\beta,\gamma}+g_{\mu\gamma,\beta}-g_{\beta\gamma,\mu})
 \end{equation*}
 %
@@ -121,22 +121,15 @@ Compute connection coefficients.
   (transpose 2 3 grad)
   (product -1 (transpose 1 2 (transpose 2 3 grad))) ; transpose bc,a to (,a)bc
 )))
-\end{verbatim}
-%
-\begin{equation*}
-\Gamma^\alpha{}_{\beta\gamma}=g^{\alpha\mu}\Gamma_{\mu\beta\gamma}
-\end{equation*}
-%
-\begin{verbatim}
+
 (setq GAMUDD (contract 2 3 (product guu GAMDDD)))
 \end{verbatim}
 
-Compute Riemann tensor.
-%
+Calculate Riemann tensor.
 \begin{equation*}
 R^\alpha{}_{\beta\gamma\delta}
-=\frac{\partial\Gamma^\alpha{}_{\beta\delta}}{\partial x^\gamma}
--\frac{\partial\Gamma^\alpha{}_{\beta\gamma}}{\partial x^\delta}
+=\Gamma^\alpha{}_{\beta\delta,\gamma}
+-\Gamma^\alpha{}_{\beta\gamma,\delta}
 +\Gamma^\alpha{}_{\mu\gamma}\Gamma^\mu{}_{\beta\delta}
 -\Gamma^\alpha{}_{\mu\delta}\Gamma^\mu{}_{\beta\gamma}
 \end{equation*}
@@ -154,7 +147,7 @@ R^\alpha{}_{\beta\gamma\delta}
 ))
 \end{verbatim}
 
-Compute Ricci tensor.
+Calculate Ricci tensor.
 \begin{equation*}
 R_{\mu\nu}=R^\alpha{}_{\mu\alpha\nu}
 \end{equation*}
@@ -163,7 +156,7 @@ R_{\mu\nu}=R^\alpha{}_{\mu\alpha\nu}
 (setq RDD (contract 1 3 RUDDD))
 \end{verbatim}
 
-Compute Ricci scalar.
+Calculate Ricci scalar.
 \begin{equation*}
 R=R^\mu{}_\mu
 \end{equation*}
@@ -172,7 +165,7 @@ R=R^\mu{}_\mu
 (setq R (contract 1 2 (contract 2 3 (product guu RDD))))
 \end{verbatim}
 
-Compute Einstein tensor.
+Calculate Einstein tensor.
 \begin{equation*}
 G_{\mu\nu}=R_{\mu\nu}-\frac{1}{2}g_{\mu\nu}R
 \end{equation*}
