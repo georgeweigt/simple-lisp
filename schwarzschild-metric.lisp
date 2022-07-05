@@ -1,5 +1,3 @@
-"Does Einstein tensor vanish for Schwarzschild metric?"
-
 ; calculate using intermediate function (xi r)
 
 ; metric tensor
@@ -63,9 +61,12 @@
 
 (setq GDD (sum RDD (product -1/2 gdd R)))
 
+"Einstein tensor before simplification"
+(printcars GDD)
+
 ; cancel denominators to simplify
 
-(setq GDD (product GDD r (power r 2) (xi r) (power (xi r) 2)))
+(setq GDD (product GDD r (power r 2) (xi r)))
 
 ; replace (xi r) with Schwarzschild metric
 
@@ -73,6 +74,6 @@
 
 (setq GDD (eval GDD))
 
-; GDD = 0?
+"Does Einstein tensor vanish for Schwarzschild metric?"
 
 (cond ((zerop GDD) "yes") (t "no"))
