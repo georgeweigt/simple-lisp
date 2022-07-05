@@ -31,7 +31,7 @@
 (setq GAMDDD (product 1/2 (sum
   gddd
   (transpose 2 3 gddd)
-  (product -1 (transpose 1 2 (transpose 2 3 gddd))) ; transpose to (,a)bc
+  (product -1 (transpose 1 2 (transpose 2 3 gddd))) ; transpose bc,a to (,a)bc
 )))
 
 (setq GAMUDD (contract 2 3 (product guu GAMDDD)))

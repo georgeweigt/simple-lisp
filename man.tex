@@ -119,7 +119,7 @@ Compute connection coefficients.
 (setq GAMDDD (product 1/2 (sum
   gddd
   (transpose 2 3 grad)
-  (product -1 (transpose 1 2 (transpose 2 3 grad))) ; transpose to (,a)bc
+  (product -1 (transpose 1 2 (transpose 2 3 grad))) ; transpose bc,a to (,a)bc
 )))
 \end{verbatim}
 %
