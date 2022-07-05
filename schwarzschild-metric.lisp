@@ -61,7 +61,7 @@
 
 (setq GDD (sum RDD (product -1/2 gdd R)))
 
-"Einstein tensor before simplification"
+"Einstein tensor"
 (printcars GDD)
 
 ; cancel denominators to simplify
@@ -75,4 +75,4 @@
 (setq GDD (eval GDD))
 
 "Does Einstein tensor vanish for Schwarzschild metric?"
-(cond ((zerop GDD) "yes") (t "no"))
+(if (equal GDD 0) "yes" "no")
