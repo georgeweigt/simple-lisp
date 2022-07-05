@@ -1,4 +1,4 @@
-"Does Einstein tensor for Schwarzschild metric vanish?"
+"Does Einstein tensor vanish for Schwarzschild metric?"
 
 ; calculate using intermediate function (xi r)
 
@@ -65,14 +65,14 @@
 
 ; cancel denominators to simplify
 
-(setq G (product GDD r (power r 2) (xi r) (power (xi r) 2)))
+(setq GDD (product GDD r (power r 2) (xi r) (power (xi r) 2)))
 
 ; replace (xi r) with Schwarzschild metric
 
 (define xi (sum 1 (product -2 M (power r -1))))
 
-(setq G (eval G))
+(setq GDD (eval GDD))
 
 ; G = 0?
 
-(cond ((zerop G) "yes") (t "no"))
+(cond ((zerop GDD) "yes") (t "no"))
