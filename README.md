@@ -18,5 +18,5 @@ To run a lisp program
 Example
 
 ```
-./lisp qed.lisp
+./lisp schwarzschild-metric.lisp
 ```
