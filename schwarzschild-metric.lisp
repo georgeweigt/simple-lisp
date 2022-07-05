@@ -73,6 +73,6 @@
 
 (setq GDD (eval GDD))
 
-; G = 0?
+; GDD = 0?
 
 (cond ((zerop GDD) "yes") (t "no"))
