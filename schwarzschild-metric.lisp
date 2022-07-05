@@ -26,25 +26,25 @@
   (product (derivative arg phi)   (tensor phi))
 ))
 
-(setq grad (gradient gdd))
+(setq gddd (gradient gdd))
 
 (setq GAMDDD (product 1/2 (sum
-  grad
-  (transpose 2 3 grad)
-  (product -1 (transpose 1 2 (transpose 2 3 grad)))
+  gddd
+  (transpose 2 3 gddd)
+  (product -1 (transpose 1 2 (transpose 2 3 gddd))) ; transpose to (,a)bc
 )))
 
 (setq GAMUDD (contract 2 3 (product guu GAMDDD)))
 
 ; riemann tensor
 
-(setq grad (gradient GAMUDD))
+(setq GAMUDDD (gradient GAMUDD))
 
 (setq GAMGAM (contract 2 4 (product GAMUDD GAMUDD)))
 
 (setq RUDDD (sum
-  (transpose 3 4 grad)
-  (product -1 grad)
+  (transpose 3 4 GAMUDDD)
+  (product -1 GAMUDDD)
   (transpose 2 3 GAMGAM)
   (product -1 (transpose 3 4 (transpose 2 3 GAMGAM)))
 ))
