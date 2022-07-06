@@ -8,7 +8,7 @@
 <br>
 (adjunct A x y z) returns the adjunct of 3x3 matrix A where x, y, and z are the index names.
 <br>
-(adjunct A w x y z) returns the adjunct of 4x4 matrix A where w, x, y, and z are the index names
+(adjunct A w x y z) returns the adjunct of 4x4 matrix A where w, x, y, and z are the index names.
 
 <p>
 <h1>and</h1>
@@ -106,7 +106,7 @@
 
 <p>
 (contract i j A)
-Returns the contraction of tensor A over indices i and j.
+returns the contraction of tensor A over indices i and j.
 
 <p>
 <h1>cos</h1>
@@ -515,12 +515,11 @@ trigonometric simplifications occur automatically.
 <p>
 <h1>tensor</h1>
 
-<pre>
-     ? (product (tensor x) (tensor y))
-     (tensor x y)
-     ? (product (tensor y) (tensor x))
-     (tensor y x)
-</pre>
+<p>
+(tensor x y ...)
+is a tensor component with index names x, y, etc.
+A complete tensor component is the product of (tensor x y ...) with other terms.
+Vectors, matrices, and higher rank tensors are written as sums of complete tensor components.
 
 <p>
 <h1>test</h1>
@@ -533,7 +532,7 @@ If the number of arguments is odd then the final argument is returned if all els
 
 <p>
 (transpose i j A)
-Returns the transposition of tensor A for indices i and j.
+returns the transposition of tensor A across indices i and j.
 
 <p>
 <h1>zerop</h1>
