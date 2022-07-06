@@ -1003,7 +1003,6 @@ print(U *p)
 void
 print1(U *p)
 {
-	static char buf[100];
 	switch (p->k) {
 	case CONS:
 		printf("(");

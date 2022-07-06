@@ -75,4 +75,4 @@
 (setq GDD (eval GDD))
 
 "Does Einstein tensor vanish for Schwarzschild metric?"
-(test (equal GDD 0) "yes" "no")
+(equal GDD 0)
