@@ -166,62 +166,62 @@ int gp[17][17] = {
 U * eval(U *p);
 U * eval_user_function(U *p);
 U * eval_args(U *p);
-U * zand(U *p);
-U * zappend(U *p);
+U * eval_and(U *p);
+U * eval_append(U *p);
 U * append(U *p1, U *p2);
-U * zatom(U *p);
-U * zcar(U *p);
-U * zcdr(U *p);
-U * zcomponent(U *p);
-U * zcond(U *p);
-U * zcons(U *p);
+U * eval_atom(U *p);
+U * eval_car(U *p);
+U * eval_cdr(U *p);
+U * eval_component(U *p);
+U * eval_cond(U *p);
+U * eval_cons(U *p);
 U * cons(U *p1, U *p2);
-U * zcontract(U *p);
+U * eval_contract(U *p);
 int tindex(U *p);
-U * zdefine(U *p);
-U * zderivative(U *p);
-U * zdot(U *p);
-U * zequal(U *p);
+U * eval_define(U *p);
+U * eval_derivative(U *p);
+U * eval_dot(U *p);
+U * eval_equal(U *p);
 int equal(U *p1, U *p2);
-U * zeval(U *p);
-U * zexit(U *p);
-U * zfixp(U *p);
+U * eval_eval(U *p);
+U * eval_exit(U *p);
+U * eval_fixp(U *p);
 void gc(void);
 void untag(U *p);
-U * zgoto(U *p);
-U * zgreaterp(U *p);
-U * ztest(U *p);
-U * zintegral(U *p);
-U * zlessp(U *p);
+U * eval_goto(U *p);
+U * eval_greaterp(U *p);
+U * eval_test(U *p);
+U * eval_integral(U *p);
+U * eval_lessp(U *p);
 int lessp(U *p1, U *p2);
-U * zlist(U *p);
+U * eval_list(U *p);
 void load(char *s);
-U * zlength(U *p);
-U * znot(U *p);
-U * znull(U *p);
-U * znumberp(U *p);
-U * zor(U *p);
-U * zprintcars(U *p);
+U * eval_length(U *p);
+U * eval_not(U *p);
+U * eval_null(U *p);
+U * eval_numberp(U *p);
+U * eval_or(U *p);
+U * eval_printcars(U *p);
 void add(int *pa, int *pb, int a, int b);
-U * zpower(U *p);
-U * zprint(U *p);
+U * eval_power(U *p);
+U * eval_print(U *p);
 void print(U *p);
 void print1(U *p);
-U * zproduct(U *p);
-U * zprog(U *p);
+U * eval_product(U *p);
+U * eval_prog(U *p);
 void pushvars(U *p);
 void popvars(U *p);
-U * zquote(U *p);
-U * zreturn(U *p);
-U * zsetq(U *p);
-U * zsubst(U *p);
+U * eval_quote(U *p);
+U * eval_return(U *p);
+U * eval_setq(U *p);
+U * eval_subst(U *p);
 U * subst(U *p1, U *p2, U *p3);
-U * zsum(U *p);
-U * ztensor(U *p);
+U * eval_sum(U *p);
+U * eval_tensor(U *p);
 U * contract(U *p, int i, int j);
 U * transpose(U *p, int i, int j);
 void mult(int *pa, int *pb, int a, int b);
-U * ztranspose(U *p);
+U * eval_transpose(U *p);
 void init(void);
 void stop(char *s);
 void push(U *p);
@@ -300,45 +300,45 @@ eval(U *p)
 
 	switch (p->u.cons.car->k) {
 	case SYM:		return eval_user_function(p);
-	case ZAND:		return zand(p);
-	case ZAPPEND:		return zappend(p);
-	case ZATOM:		return zatom(p);
-	case ZCAR:		return zcar(p);
-	case ZCDR:		return zcdr(p);
-	case ZCOMPONENT:	return zcomponent(p);
-	case ZCOND:		return zcond(p);
-	case ZCONS:		return zcons(p);
-	case ZCONTRACT:		return zcontract(p);
-	case ZDEFINE:		return zdefine(p);
-	case ZDERIVATIVE:	return zderivative(p);
-	case ZDOT:		return zdot(p);
-	case ZEQUAL:		return zequal(p);
-	case ZEVAL:		return zeval(p);
-	case ZEXIT:		return zexit(p);
-	case ZGOTO:		return zgoto(p);
-	case ZGREATERP:		return zgreaterp(p);
-	case ZTEST:		return ztest(p);
-	case ZINTEGERP:		return zfixp(p);
-	case ZINTEGRAL:		return zintegral(p);
-	case ZLENGTH:           return zlength(p);
-	case ZLESSP:		return zlessp(p);
-	case ZLIST:		return zlist(p);
-	case ZNOT:		return znot(p);
-	case ZNULL:		return znull(p);
-	case ZNUMBERP:		return znumberp(p);
-	case ZOR:		return zor(p);
-	case ZPOWER:		return zpower(p);
-	case ZPRINT:		return zprint(p);
-	case ZPRINTCARS:	return zprintcars(p);
-	case ZPRODUCT:		return zproduct(p);
-	case ZPROG:		return zprog(p);
-	case ZQUOTE:		return zquote(p);
-	case ZRETURN:		return zreturn(p);
-	case ZSETQ:		return zsetq(p);
-	case ZSUM:		return zsum(p);
-	case ZSUBST:		return zsubst(p);
-	case ZTENSOR:		return ztensor(p);
-	case ZTRANSPOSE:	return ztranspose(p);
+	case ZAND:		return eval_and(p);
+	case ZAPPEND:		return eval_append(p);
+	case ZATOM:		return eval_atom(p);
+	case ZCAR:		return eval_car(p);
+	case ZCDR:		return eval_cdr(p);
+	case ZCOMPONENT:	return eval_component(p);
+	case ZCOND:		return eval_cond(p);
+	case ZCONS:		return eval_cons(p);
+	case ZCONTRACT:		return eval_contract(p);
+	case ZDEFINE:		return eval_define(p);
+	case ZDERIVATIVE:	return eval_derivative(p);
+	case ZDOT:		return eval_dot(p);
+	case ZEQUAL:		return eval_equal(p);
+	case ZEVAL:		return eval_eval(p);
+	case ZEXIT:		return eval_exit(p);
+	case ZGOTO:		return eval_goto(p);
+	case ZGREATERP:		return eval_greaterp(p);
+	case ZTEST:		return eval_test(p);
+	case ZINTEGERP:		return eval_fixp(p);
+	case ZINTEGRAL:		return eval_integral(p);
+	case ZLENGTH:           return eval_length(p);
+	case ZLESSP:		return eval_lessp(p);
+	case ZLIST:		return eval_list(p);
+	case ZNOT:		return eval_not(p);
+	case ZNULL:		return eval_null(p);
+	case ZNUMBERP:		return eval_numberp(p);
+	case ZOR:		return eval_or(p);
+	case ZPOWER:		return eval_power(p);
+	case ZPRINT:		return eval_print(p);
+	case ZPRINTCARS:	return eval_printcars(p);
+	case ZPRODUCT:		return eval_product(p);
+	case ZPROG:		return eval_prog(p);
+	case ZQUOTE:		return eval_quote(p);
+	case ZRETURN:		return eval_return(p);
+	case ZSETQ:		return eval_setq(p);
+	case ZSUM:		return eval_sum(p);
+	case ZSUBST:		return eval_subst(p);
+	case ZTENSOR:		return eval_tensor(p);
+	case ZTRANSPOSE:	return eval_transpose(p);
 	default:		return p; /* a list with ? head */
 	}
 }
@@ -416,7 +416,7 @@ eval_args(U *p)
 }
 
 U *
-zand(U *p)
+eval_and(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -428,7 +428,7 @@ zand(U *p)
 }
 
 U *
-zappend(U *p)
+eval_append(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -455,7 +455,7 @@ append(U *p1, U *p2)
 }
 
 U *
-zatom(U *p)
+eval_atom(U *p)
 {
 	p = eval(arg1(p));
 	if (iscons(p))
@@ -465,19 +465,19 @@ zatom(U *p)
 }
 
 U *
-zcar(U *p)
+eval_car(U *p)
 {
 	return car(eval(arg1(p)));
 }
 
 U *
-zcdr(U *p)
+eval_cdr(U *p)
 {
 	return cdr(eval(arg1(p)));
 }
 
 U *
-zcomponent(U *p)
+eval_component(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -494,7 +494,7 @@ zcomponent(U *p)
 }
 
 U *
-zcond(U *p)
+eval_cond(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -506,7 +506,7 @@ zcond(U *p)
 }
 
 U *
-zcons(U *p)
+eval_cons(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -537,7 +537,7 @@ cons(U *p1, U *p2)
 }
 
 U *
-zcontract(U *p)
+eval_contract(U *p)
 {
 	int i, j;
 	i = tindex(eval(arg1(p)));
@@ -567,7 +567,7 @@ tindex(U *p)
 /* just like setq except arg2 is not evaluated */
 
 U *
-zdefine(U *p)
+eval_define(U *p)
 {
 	U *p1, *p2;
 	p1 = arg1(p);
@@ -578,7 +578,7 @@ zdefine(U *p)
 }
 
 U *
-zderivative(U *p)
+eval_derivative(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -591,7 +591,7 @@ zderivative(U *p)
 }
 
 U *
-zdot(U *p)
+eval_dot(U *p)
 {
 	int h = tos;
 	p = cdr(p);
@@ -603,7 +603,7 @@ zdot(U *p)
 }
 
 U *
-zequal(U *p)
+eval_equal(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -650,7 +650,7 @@ equal(U *p1, U *p2)
 }
 
 U *
-zeval(U *p)
+eval_eval(U *p)
 {
 	p = eval(arg1(p));
 	push(p);
@@ -660,7 +660,7 @@ zeval(U *p)
 }
 
 U *
-zexit(U *p)
+eval_exit(U *p)
 {
 	(void) p;
 	exit(1);
@@ -668,7 +668,7 @@ zexit(U *p)
 }
 
 U *
-zfixp(U *p)
+eval_fixp(U *p)
 {
 	p = eval(arg1(p));
 	if (p->k == NUM && p->u.num.b == 1)
@@ -721,13 +721,13 @@ untag(U *p)
 }
 
 U *
-zgoto(U *p)
+eval_goto(U *p)
 {
 	return p;
 }
 
 U *
-zgreaterp(U *p)
+eval_greaterp(U *p)
 {
 
 	U *p1, *p2;
@@ -742,7 +742,7 @@ zgreaterp(U *p)
 }
 
 U *
-ztest(U *p)
+eval_test(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -758,7 +758,7 @@ ztest(U *p)
 /* example: p = (integral (power x 2) x) */
 
 U *
-zintegral(U *p)
+eval_integral(U *p)
 {
 	push(eval(arg1(p)));
 	push(eval(arg2(p)));
@@ -767,7 +767,7 @@ zintegral(U *p)
 }
 
 U *
-zlessp(U *p)
+eval_lessp(U *p)
 {
 	U *p1, *p2;
 	p1 = eval(arg1(p));
@@ -843,7 +843,7 @@ lessp(U *p1, U *p2)
 }
 
 U *
-zlist(U *p)
+eval_list(U *p)
 {
 	int i, n = 0;
 	p = cdr(p);
@@ -860,7 +860,7 @@ zlist(U *p)
 }
 
 U *
-zload(U *p)
+eval_load(U *p)
 {
 	p = eval(arg1(p));
 	if (isstr(p))
@@ -898,7 +898,7 @@ load(char *s)
 }
 
 U *
-zlength(U *p)
+eval_length(U *p)
 {
 	int n = 0;
 	p = eval(arg1(p));
@@ -910,7 +910,7 @@ zlength(U *p)
 }
 
 U *
-znot(U *p)
+eval_not(U *p)
 {
 	if (eval(arg1(p)) == nil)
 		return t;
@@ -919,7 +919,7 @@ znot(U *p)
 }
 
 U *
-znull(U *p)
+eval_null(U *p)
 {
 	if (eval(arg1(p)) == nil)
 		return t;
@@ -928,7 +928,7 @@ znull(U *p)
 }
 
 U *
-znumberp(U *p)
+eval_numberp(U *p)
 {
 	p = eval(arg1(p));
 	if (isnum(p))
@@ -938,7 +938,7 @@ znumberp(U *p)
 }
 
 U *
-zor(U *p)
+eval_or(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -950,7 +950,7 @@ zor(U *p)
 }
 
 U *
-zprintcars(U *p)
+eval_printcars(U *p)
 {
 	p = eval(arg1(p));
 	while (iscons(p)) {
@@ -974,7 +974,7 @@ add(int *pa, int *pb, int a, int b)
 }
 
 U *
-zpower(U *p)
+eval_power(U *p)
 {
 	push(eval(arg1(p)));
 	push(eval(arg2(p)));
@@ -982,7 +982,7 @@ zpower(U *p)
 }
 
 U *
-zprint(U *p)
+eval_print(U *p)
 {
 	p = cdr(p);
 	while (iscons(p)) {
@@ -1036,7 +1036,7 @@ print1(U *p)
 }
 
 U *
-zproduct(U *p)
+eval_product(U *p)
 {
 	int h = tos;
 	p = cdr(p);
@@ -1048,7 +1048,7 @@ zproduct(U *p)
 }
 
 U *
-zprog(U *p)
+eval_prog(U *p)
 {
 	U *p1, *p2;
 
@@ -1101,19 +1101,19 @@ popvars(U *p)
 }
 
 U *
-zquote(U *p)
+eval_quote(U *p)
 {
 	return arg1(p);
 }
 
 U *
-zreturn(U *p)
+eval_return(U *p)
 {
 	return p;
 }
 
 U *
-zsetq(U *p)
+eval_setq(U *p)
 {
 	U *p1, *p2;
 	p1 = arg1(p);
@@ -1124,7 +1124,7 @@ zsetq(U *p)
 }
 
 U *
-zsubst(U *p)
+eval_subst(U *p)
 {
 	U *p1, *p2, *p3;
 
@@ -1165,7 +1165,7 @@ subst(U *p1, U *p2, U *p3)
 }
 
 U *
-zsum(U *p)
+eval_sum(U *p)
 {
 	int h = tos;
 	p = cdr(p);
@@ -1177,7 +1177,7 @@ zsum(U *p)
 }
 
 U *
-ztensor(U *p)
+eval_tensor(U *p)
 {
 	switch (tensor_op) {
 	default:
@@ -1272,7 +1272,7 @@ mult(int *pa, int *pb, int a, int b)
 }
 
 U *
-ztranspose(U *p)
+eval_transpose(U *p)
 {
 	int i, j;
 	i = tindex(eval(arg1(p)));
@@ -1414,7 +1414,7 @@ init(void)
 void
 stop(char *s)
 {
-	printf("\nERROR %s\n", s);
+	printf("\nstop: %s\n", s);
 	exit(1);
 }
 
