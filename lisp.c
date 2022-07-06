@@ -32,7 +32,7 @@
 #define ZEXIT		19
 #define ZGOTO		20
 #define ZGREATERP	21
-#define ZIF		22
+#define ZTEST		22
 #define ZINTEGERP	23
 #define ZINTEGRAL	24
 #define ZLENGTH		25
@@ -140,7 +140,6 @@ int index_j;
 char buf[BUF];
 int k;
 char strbuf[STRBUF + 1];
-int alloc_count;
 
 /* gamma product matrix */
 
@@ -164,7 +163,6 @@ int gp[17][17] = {
 	0,0,12,13,14,15,9,10,11,-6,-7,-8,-2,-3,-4,-5,-1,
 };
 
-int main(int argc, char *argv[]);
 U * eval(U *p);
 U * eval_user_function(U *p);
 U * eval_args(U *p);
@@ -192,7 +190,7 @@ void gc(void);
 void untag(U *p);
 U * zgoto(U *p);
 U * zgreaterp(U *p);
-U * zif(U *p);
+U * ztest(U *p);
 U * zintegral(U *p);
 U * zlessp(U *p);
 int lessp(U *p1, U *p2);
@@ -278,13 +276,11 @@ main(int argc, char *argv[])
 	for (i = 1; i < argc; i++)
 		load(argv[i]);
 	for (;;) {
-		if (alloc_count > MEM / 100) {
-			gc();
-			alloc_count = 0;
-		}
 		printf("? ");
 		p = read1();
+		push(p); // save from gc()
 		p = eval(p);
+		pop();
 		if (p != nothing)
 			print(p);
 		if (tos)
@@ -321,7 +317,7 @@ eval(U *p)
 	case ZEXIT:		return zexit(p);
 	case ZGOTO:		return zgoto(p);
 	case ZGREATERP:		return zgreaterp(p);
-	case ZIF:		return zif(p);
+	case ZTEST:		return ztest(p);
 	case ZINTEGERP:		return zfixp(p);
 	case ZINTEGRAL:		return zintegral(p);
 	case ZLENGTH:           return zlength(p);
@@ -746,12 +742,17 @@ zgreaterp(U *p)
 }
 
 U *
-zif(U *p)
+ztest(U *p)
 {
-	if (eval(arg1(p)) == nil)
-		return eval(arg3(p));
-	else
-		return eval(arg2(p));
+	p = cdr(p);
+	while (iscons(p)) {
+		if (!iscons(cdr(p)))
+			return eval(car(p));
+		if (eval(car(p)) != nil)
+			return eval(cadr(p));
+		p = cddr(p);
+	}
+	return nil;
 }
 
 /* example: p = (integral (power x 2) x) */
@@ -881,14 +882,12 @@ load(char *s)
 		return;
 	}
 	for (;;) {
-		if (alloc_count > MEM / 100) {
-			gc();
-			alloc_count = 0;
-		}
 		p = read1();
 		if (p == eof)
 			break;
+		push(p); // save from gc()
 		p = eval(p);
+		pop();
 		if (p != nothing)
 			print(p);
 		if (tos)
@@ -1327,7 +1326,7 @@ init(void)
 	symbol("exit")		->k = ZEXIT;
 	symbol("goto")		->k = ZGOTO;
 	symbol("greaterp")	->k = ZGREATERP;
-	symbol("if")		->k = ZIF;
+	symbol("test")		->k = ZTEST;
 	symbol("integerp")	->k = ZINTEGERP;
 	symbol("integral")	->k = ZINTEGRAL;
 	symbol("lessp")		->k = ZLESSP;
@@ -1467,11 +1466,13 @@ U *
 alloc(void)
 {
 	U *p;
-	if (freelist == nil)
-		stop("out of memory");
+	if (freelist == nil) {
+		gc();
+		if (freelist == nil)
+			stop("out of memory");
+	}
 	p = freelist;
 	freelist = freelist->u.cons.cdr;
-	alloc_count++;
 	return p;
 }
 
