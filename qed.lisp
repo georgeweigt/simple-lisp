@@ -35,7 +35,7 @@
   (product -1 (power ay 2))
   (product -1 (power az 2))
 ))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 (setq I (sum
   (tensor t t)
   (tensor x x)
@@ -66,12 +66,12 @@
   (product -1 (tensor y t))
   (tensor z x)
 ))
-(equal (dot gammat gammat) I) ; print "t" if it's true
-(equal (dot gammax gammax) (dot -1 I)) ; print "t" if it's true
-(equal (dot gammay gammay) (dot -1 I)) ; print "t" if it's true
-(equal (dot gammaz gammaz) (dot -1 I)) ; print "t" if it's true
+(equal (dot gammat gammat) I)
+(equal (dot gammax gammax) (dot -1 I))
+(equal (dot gammay gammay) (dot -1 I))
+(equal (dot gammaz gammaz) (dot -1 I))
 (setq gamma5 (dot gammax gammay gammaz gammat))
-(equal (dot gamma5 gamma5) (dot -1 I)) ; print "t" if it's true
+(equal (dot gamma5 gamma5) (dot -1 I))
 ; gamma is a "vector" of dirac matrices
 (setq gamma (sum
   (product gammat (tensor t))
@@ -89,7 +89,7 @@
   (product -1 ay gammay)
   (product -1 az gammaz)
 ))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 ; note: gammas are square matrices, use "dot" to multiply
 ; use "spacetime-dot" to multiply spacetime vectors
 (setq tmp1 (dot agamma bgamma))
@@ -97,25 +97,25 @@
   (dot -1 bgamma agamma)
   (dot 2 (spacetime-dot a b) I)
 ))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 (setq tmp1 (dot agamma gamma5))
 (setq tmp2 (dot -1 gamma5 agamma))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 (setq tmp1 (dot gammax agamma gammax))
 (setq tmp2 (sum agamma (dot 2 ax gammax)))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 (setq tmp1 (spacetime-dot gamma gamma))
 (setq tmp2 (dot 4 I))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 (setq tmp1 (spacetime-dot gamma (dot agamma gamma)))
 (setq tmp2 (dot -2 agamma))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 (setq tmp1 (spacetime-dot gamma (dot agamma bgamma gamma)))
 (setq tmp2 (dot 4 (spacetime-dot a b) I))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 (setq tmp1 (spacetime-dot gamma (dot agamma bgamma cgamma gamma)))
 (setq tmp2 (dot -2 cgamma bgamma agamma))
-(equal tmp1 tmp2) ; print "t" if it's true
+(equal tmp1 tmp2)
 ; define series approximations for some transcendental functions
 ; for 32-bit integers, overflow occurs for powers above 5
 (define order 5)
