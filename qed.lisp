@@ -119,7 +119,7 @@
 ; define series approximations for some transcendental functions
 ; for 32-bit integers, overflow occurs for powers above 5
 (define order 5)
-(define yexp (prog tmp count
+(define yexp (prog (tmp count)
   (setq tmp 0)
   (setq count order)
 loop
@@ -145,7 +145,7 @@ loop
   (product 1/2 (yexp (product -1 arg)))
 ))
 ; same as above but for matrices
-(define YEXP (prog tmp count
+(define YEXP (prog (tmp count)
   (setq tmp 0)
   (setq count order)
 loop
