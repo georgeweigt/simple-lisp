@@ -748,7 +748,7 @@ eval_test(U *p)
 	while (iscons(p)) {
 		if (!iscons(cdr(p)))
 			return eval(car(p));
-		if (eval(car(p)) != nil)
+		if (eval(car(p)) == t)
 			return eval(cadr(p));
 		p = cddr(p);
 	}
