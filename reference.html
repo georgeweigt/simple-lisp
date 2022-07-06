@@ -4,21 +4,11 @@
 <h1>adjunct</h1>
 
 <p>
-A adj A = det A I
-
-<pre>
-     ? (setq A (sum
-     (product a (tensor x x))
-     (product b (tensor x y))
-     (product c (tensor y x))
-     (product d (tensor y y))
-     ))
-     ? (setq A1 (adjunct A x y))
-     ? (setq AA1 (contract23 (product A A1)))
-     ? (setq I (sum (tensor x x) (tensor y y)))
-     ? (equal AA1 (product (determinant A x y) I))
-     t
-</pre>
+(adjunct A x y) returns the adjunct of 2x2 matrix A where x and y are the index names
+<br>
+(adjunct A x y z) returns the adjunct of 3x3 matrix A where x, y, and z are the index names.
+<br>
+(adjunct A w x y z) returns the adjunct of 4x4 matrix A where w, x, y, and z are the index names
 
 <p>
 <h1>and</h1>
@@ -75,6 +65,9 @@ A adj A = det A I
 <p>
 <h1>component</h1>
 
+<p>
+(component A x y ...) returns the component of tensor A where x, y, etc. are the index names.
+
 <pre>
      ? (setq A (sum
      (product a (tensor x x))
@@ -112,20 +105,8 @@ A adj A = det A I
 <h1>contract</h1>
 
 <p>
-Form: contract12, contract13, contract23, etc.
-For example (contract12 x) contracts, or sums over,
-the first and second indices.
-
-<pre>
-     ? (setq A (sum
-     (product a (tensor x x))
-     (product b (tensor x y))
-     (product c (tensor y x))
-     (product d (tensor y y))
-     ))
-     ? (contract12 A)
-     (sum a d)
-</pre>
+(contract i j A)
+Returns the contraction of tensor A over indices i and j.
 
 <p>
 <h1>cos</h1>
@@ -171,40 +152,27 @@ This function returns the exponential form of the cosine function.
 <h1>determinant</h1>
 
 <p>
-see adjunct
+(determinant A x y) returns the determinant of 2x2 matrix A where x and y are the index names
+<br>
+(determinant A x y z) returns the determinant of 3x3 matrix A where x, y, and z are the index names.
+<br>
+(determinant A w x y z) returns the determinant of 4x4 matrix A where w, x, y, and z are the index names
 
 <p>
 <h1>dot</h1>
 
 <p>
-The dot function returns the inner product of scalars and tensors.
+(dot a b ...)
+returns the inner product of scalars and tensors.
 It is equivalent to an outer product followed by a contraction on
 the inner indices.
-
-<pre>
-     ? (setq A (sum (product A11 (tensor 1 1)) (product A22 (tensor 2 2))))
-     ? (setq X (sum (product X1 (tensor 1)) (product X2 (tensor 2))))
-     ? (setq AX1 (dot A X))
-     ? (setq AX2 (contract23 (product A X)))
-     ? (equal AX1 AX2)
-     t
-     ? (printcars AX1)
-     sum
-     (product A11 X1 (tensor 1))
-     (product A22 X2 (tensor 2))
-</pre>
-
-<p>
-The arguments are multiplied left to right,
-i.e. (dot a b c) = (dot (dot a b) c).
+The arguments are evaluated from left to right, i.e. (dot a b c) = (dot (dot a b) c).
 
 <p>
 <h1>e</h1>
 
-<pre>
-     ? (derivative (power e x) x)
-     (power e x)
-</pre>
+<p>
+Symbol e is the natural number.
 
 <p>
 <h1>equal</h1>
@@ -578,23 +546,8 @@ If the number of arguments is odd then the final argument is returned if all els
 <h1>transpose</h1>
 
 <p>
-Form: transpose12, transpose13, transpose23, etc.
-For example (transpose12 x) transposes the first and second indices.
-
-<pre>
-     ? (setq A (sum
-     (product a (tensor x x))
-     (product b (tensor x y))
-     (product c (tensor y x))
-     (product d (tensor y y))
-     ))
-     ? (printcars (transpose12 A))
-     sum
-     (product a (tensor x x))
-     (product b (tensor y x))
-     (product c (tensor x y))
-     (product d (tensor y y))
-</pre>
+(transpose i j A)
+Returns the transposition of tensor A for indices i and j.
 
 <p>
 <h1>zerop</h1>
