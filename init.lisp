@@ -73,26 +73,6 @@
 (define cdddar (cdr (cdr (cdr (car arg)))))
 (define cddddr (cdr (cdr (cdr (cdr arg)))))
 
-(define COS (sum
-  (product 1/2 (exp (product i arg)))
-  (product 1/2 (exp (product -1 i arg)))
-))
-
-(define SIN (sum
-  (product -1/2 i (exp (product i arg)))
-  (product 1/2 i (exp (product -1 i arg)))
-))
-
-(define COSH (sum
-  (product 1/2 (exp arg))
-  (product 1/2 (exp (product -1 arg)))
-))
-
-(define SINH (sum
-  (product 1/2 (exp arg))
-  (product -1/2 (exp (product -1 arg)))
-))
-
 (define adjunct (cond
   (arg5 (adjunct4 arg1 arg2 arg3 arg4 arg5))
   (arg4 (adjunct3 arg1 arg2 arg3 arg4))

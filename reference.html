@@ -117,19 +117,6 @@ returns the contraction of tensor A over indices i and j.
 </pre>
 
 <p>
-<h1>COS</h1>
-
-<p>
-This function returns the exponential form of the cosine function.
-
-<pre>
-     ? (printcars (COS x))
-     sum
-     (product 1/2 (power e (product -1 i x)))
-     (product 1/2 (power e (product i x)))
-</pre>
-
-<p>
 <h1>define</h1>
 
 <pre>
@@ -471,26 +458,6 @@ An apostrophe does the same thing.
 <pre>
      ? (derivative (sin x) x)
      (cos x)
-</pre>
-
-<p>
-<h1>SIN</h1>
-
-<p>
-The SIN function returns the exponential form of the sine function.
-In some cases it is better to use SIN and COS because many
-trigonometric simplifications occur automatically.
-
-<pre>
-     ? (printcars (SIN x))
-     sum
-     (product -1/2 i (power e (product i x)))
-     (product 1/2 i (power e (product -1 i x)))
-</pre>
-
-<pre>
-     ? (sum (power (COS x) 2) (power (SIN x) 2))
-     1
 </pre>
 
 <p>
