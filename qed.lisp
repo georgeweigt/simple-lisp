@@ -28,14 +28,14 @@
   (dot -1 (dot arg1 (tensor y)) (dot arg2 (tensor y)))
   (dot -1 (dot arg1 (tensor z)) (dot arg2 (tensor z)))
 ))
-(setq temp1 (spacetime-dot a a))
-(setq temp2 (sum
+(setq tmp1 (spacetime-dot a a))
+(setq tmp2 (sum
   (power at 2)
   (product -1 (power ax 2))
   (product -1 (power ay 2))
   (product -1 (power az 2))
 ))
-(equal temp1 temp2) ; print "t" if it's true
+(equal tmp1 tmp2) ; print "t" if it's true
 (setq I (sum
   (tensor t t)
   (tensor x x)
@@ -82,51 +82,51 @@
 (setq agamma (spacetime-dot a gamma))
 (setq bgamma (spacetime-dot b gamma))
 (setq cgamma (spacetime-dot c gamma))
-(setq temp1 agamma)
-(setq temp2 (sum
+(setq tmp1 agamma)
+(setq tmp2 (sum
   (product at gammat)
   (product -1 ax gammax)
   (product -1 ay gammay)
   (product -1 az gammaz)
 ))
-(equal temp1 temp2) ; print "t" if it's true
+(equal tmp1 tmp2) ; print "t" if it's true
 ; note: gammas are square matrices, use "dot" to multiply
 ; use "spacetime-dot" to multiply spacetime vectors
-(setq temp1 (dot agamma bgamma))
-(setq temp2 (sum
+(setq tmp1 (dot agamma bgamma))
+(setq tmp2 (sum
   (dot -1 bgamma agamma)
   (dot 2 (spacetime-dot a b) I)
 ))
-(equal temp1 temp2) ; print "t" if it's true
-(setq temp1 (dot agamma gamma5))
-(setq temp2 (dot -1 gamma5 agamma))
-(equal temp1 temp2) ; print "t" if it's true
-(setq temp1 (dot gammax agamma gammax))
-(setq temp2 (sum agamma (dot 2 ax gammax)))
-(equal temp1 temp2) ; print "t" if it's true
-(setq temp1 (spacetime-dot gamma gamma))
-(setq temp2 (dot 4 I))
-(equal temp1 temp2) ; print "t" if it's true
-(setq temp1 (spacetime-dot gamma (dot agamma gamma)))
-(setq temp2 (dot -2 agamma))
-(equal temp1 temp2) ; print "t" if it's true
-(setq temp1 (spacetime-dot gamma (dot agamma bgamma gamma)))
-(setq temp2 (dot 4 (spacetime-dot a b) I))
-(equal temp1 temp2) ; print "t" if it's true
-(setq temp1 (spacetime-dot gamma (dot agamma bgamma cgamma gamma)))
-(setq temp2 (dot -2 cgamma bgamma agamma))
-(equal temp1 temp2) ; print "t" if it's true
+(equal tmp1 tmp2) ; print "t" if it's true
+(setq tmp1 (dot agamma gamma5))
+(setq tmp2 (dot -1 gamma5 agamma))
+(equal tmp1 tmp2) ; print "t" if it's true
+(setq tmp1 (dot gammax agamma gammax))
+(setq tmp2 (sum agamma (dot 2 ax gammax)))
+(equal tmp1 tmp2) ; print "t" if it's true
+(setq tmp1 (spacetime-dot gamma gamma))
+(setq tmp2 (dot 4 I))
+(equal tmp1 tmp2) ; print "t" if it's true
+(setq tmp1 (spacetime-dot gamma (dot agamma gamma)))
+(setq tmp2 (dot -2 agamma))
+(equal tmp1 tmp2) ; print "t" if it's true
+(setq tmp1 (spacetime-dot gamma (dot agamma bgamma gamma)))
+(setq tmp2 (dot 4 (spacetime-dot a b) I))
+(equal tmp1 tmp2) ; print "t" if it's true
+(setq tmp1 (spacetime-dot gamma (dot agamma bgamma cgamma gamma)))
+(setq tmp2 (dot -2 cgamma bgamma agamma))
+(equal tmp1 tmp2) ; print "t" if it's true
 ; define series approximations for some transcendental functions
 ; for 32-bit integers, overflow occurs for powers above 5
 (define order 5)
-(define yexp (prog temp count
-  (setq temp 0)
+(define yexp (prog tmp count
+  (setq tmp 0)
   (setq count order)
 loop
-  (setq temp (product (power count -1) arg (sum 1 temp)))
+  (setq tmp (product (power count -1) arg (sum 1 tmp)))
   (setq count (sum count -1))
   (cond ((greaterp count 0) (goto loop)))
-  (return (sum 1 temp))
+  (return (sum 1 tmp))
 ))
 (define ysin (sum
   (product -1/2 i (yexp (product i arg)))
@@ -145,14 +145,14 @@ loop
   (product 1/2 (yexp (product -1 arg)))
 ))
 ; same as above but for matrices
-(define YEXP (prog temp count
-  (setq temp 0)
+(define YEXP (prog tmp count
+  (setq tmp 0)
   (setq count order)
 loop
-  (setq temp (dot (power count -1) arg (sum I temp)))
+  (setq tmp (dot (power count -1) arg (sum I tmp)))
   (setq count (sum count -1))
   (cond ((greaterp count 0) (goto loop)))
-  (return (sum I temp))
+  (return (sum I tmp))
 ))
 (define YSIN (sum
   (product -1/2 i (YEXP (product i arg)))
@@ -176,47 +176,47 @@ loop
   (t (list 'power arg1 arg2))
 ))
 (define truncate (eval (subst 'POWER 'power arg)))
-(setq temp1 (YEXP (dot 1/2 u gammat gammax)))
-(setq temp2 (sum
-  (product I (ycosh (product 1/2 u))) ; could use "dot" but not necessary
+(setq tmp1 (YEXP (dot 1/2 u gammat gammax)))
+(setq tmp2 (sum
+  (product I (ycosh (product 1/2 u)))
   (dot gammat gammax (ysinh (product 1/2 u)))
 ))
-(equal temp1 temp2) ; print t if it's true
-(setq temp1 (YEXP (dot 1/2 theta gammax gammay)))
-(setq temp2 (sum
-  (product I (ycos (product 1/2 theta))) ; could use "dot" but not necessary
+(equal tmp1 tmp2)
+(setq tmp1 (YEXP (dot 1/2 theta gammax gammay)))
+(setq tmp2 (sum
+  (product I (ycos (product 1/2 theta)))
   (dot gammax gammay (ysin (product 1/2 theta)))
 ))
-(equal temp1 temp2) ; print t if it's true
-(setq temp1 (truncate (dot
+(equal tmp1 tmp2)
+(setq tmp1 (truncate (dot
   (YEXP (dot -1/2 u gammat gammaz))
   gammat
   (YEXP (dot 1/2 u gammat gammaz))
 )))
-(setq temp2 (sum
-  (product gammat (ycosh u)) ; could use "dot" but not necessary
-  (product gammaz (ysinh u)) ; could use "dot" but not necessary
+(setq tmp2 (sum
+  (product gammat (ycosh u))
+  (product gammaz (ysinh u))
 ))
-(equal temp1 temp2) ; print t if it's true
-(setq temp1 (truncate (dot
+(equal tmp1 tmp2)
+(setq tmp1 (truncate (dot
   (YEXP (dot -1/2 u gammat gammaz))
   gammaz
   (YEXP (dot 1/2 u gammat gammaz))
 )))
-(setq temp2 (sum
-  (product gammaz (ycosh u)) ; could use "dot" but not necessary
-  (product gammat (ysinh u)) ; could use "dot" but not necessary
+(setq tmp2 (sum
+  (product gammaz (ycosh u))
+  (product gammat (ysinh u))
 ))
-(equal temp1 temp2) ; print t if it's true
-(setq temp1 (truncate (dot
+(equal tmp1 tmp2)
+(setq tmp1 (truncate (dot
   (YEXP (dot -1/2 u gammat gammaz))
   gammay
   (YEXP (dot 1/2 u gammat gammaz))
 )))
-(equal temp1 gammay) ; print t if it's true
-(setq temp1 (truncate (dot
+(equal tmp1 gammay)
+(setq tmp1 (truncate (dot
   (YEXP (dot -1/2 u gammat gammaz))
   gammax
   (YEXP (dot 1/2 u gammat gammaz))
 )))
-(equal temp1 gammax) ; print t if it's true
+(equal tmp1 gammax)
