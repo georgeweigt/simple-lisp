@@ -28,14 +28,14 @@
   (dot -1 (dot arg1 (tensor y)) (dot arg2 (tensor y)))
   (dot -1 (dot arg1 (tensor z)) (dot arg2 (tensor z)))
 ))
-(setq tmp1 (spacetime-dot a a))
-(setq tmp2 (sum
+(setq A (spacetime-dot a a))
+(setq B (sum
   (power at 2)
   (product -1 (power ax 2))
   (product -1 (power ay 2))
   (product -1 (power az 2))
 ))
-(equal tmp1 tmp2)
+(equal A B)
 (setq I (sum
   (tensor t t)
   (tensor x x)
@@ -82,40 +82,40 @@
 (setq agamma (spacetime-dot a gamma))
 (setq bgamma (spacetime-dot b gamma))
 (setq cgamma (spacetime-dot c gamma))
-(setq tmp1 agamma)
-(setq tmp2 (sum
+(setq A agamma)
+(setq B (sum
   (product at gammat)
   (product -1 ax gammax)
   (product -1 ay gammay)
   (product -1 az gammaz)
 ))
-(equal tmp1 tmp2)
+(equal A B)
 ; note: gammas are square matrices, use "dot" to multiply
 ; use "spacetime-dot" to multiply spacetime vectors
-(setq tmp1 (dot agamma bgamma))
-(setq tmp2 (sum
+(setq A (dot agamma bgamma))
+(setq B (sum
   (dot -1 bgamma agamma)
   (dot 2 (spacetime-dot a b) I)
 ))
-(equal tmp1 tmp2)
-(setq tmp1 (dot agamma gamma5))
-(setq tmp2 (dot -1 gamma5 agamma))
-(equal tmp1 tmp2)
-(setq tmp1 (dot gammax agamma gammax))
-(setq tmp2 (sum agamma (dot 2 ax gammax)))
-(equal tmp1 tmp2)
-(setq tmp1 (spacetime-dot gamma gamma))
-(setq tmp2 (dot 4 I))
-(equal tmp1 tmp2)
-(setq tmp1 (spacetime-dot gamma (dot agamma gamma)))
-(setq tmp2 (dot -2 agamma))
-(equal tmp1 tmp2)
-(setq tmp1 (spacetime-dot gamma (dot agamma bgamma gamma)))
-(setq tmp2 (dot 4 (spacetime-dot a b) I))
-(equal tmp1 tmp2)
-(setq tmp1 (spacetime-dot gamma (dot agamma bgamma cgamma gamma)))
-(setq tmp2 (dot -2 cgamma bgamma agamma))
-(equal tmp1 tmp2)
+(equal A B)
+(setq A (dot agamma gamma5))
+(setq B (dot -1 gamma5 agamma))
+(equal A B)
+(setq A (dot gammax agamma gammax))
+(setq B (sum agamma (dot 2 ax gammax)))
+(equal A B)
+(setq A (spacetime-dot gamma gamma))
+(setq B (dot 4 I))
+(equal A B)
+(setq A (spacetime-dot gamma (dot agamma gamma)))
+(setq B (dot -2 agamma))
+(equal A B)
+(setq A (spacetime-dot gamma (dot agamma bgamma gamma)))
+(setq B (dot 4 (spacetime-dot a b) I))
+(equal A B)
+(setq A (spacetime-dot gamma (dot agamma bgamma cgamma gamma)))
+(setq B (dot -2 cgamma bgamma agamma))
+(equal A B)
 ; define series approximations for some transcendental functions
 ; for 32-bit integers, overflow occurs for powers above 5
 (define order 5)
@@ -128,24 +128,24 @@ loop
   (cond ((greaterp count 0) (goto loop)))
   (return (sum 1 tmp))
 ))
-(define ysin (sum
+(define expsin (sum
   (product -1/2 i (yexp (product i arg)))
   (product 1/2 i (yexp (product -1 i arg)))
 ))
-(define ycos (sum
+(define expcos (sum
   (product 1/2 (yexp (product i arg)))
   (product 1/2 (yexp (product -1 i arg)))
 ))
-(define ysinh (sum
+(define expsinh (sum
   (product 1/2 (yexp arg))
   (product -1/2 (yexp (product -1 arg)))
 ))
-(define ycosh (sum
+(define expcosh (sum
   (product 1/2 (yexp arg))
   (product 1/2 (yexp (product -1 arg)))
 ))
 ; same as above but for matrices
-(define YEXP (prog (tmp count)
+(define EXP (prog (tmp count)
   (setq tmp 0)
   (setq count order)
 loop
@@ -154,21 +154,21 @@ loop
   (cond ((greaterp count 0) (goto loop)))
   (return (sum I tmp))
 ))
-(define YSIN (sum
-  (product -1/2 i (YEXP (product i arg)))
-  (product 1/2 i (YEXP (product -1 i arg)))
+(define SIN (sum
+  (product -1/2 i (EXP (product i arg)))
+  (product 1/2 i (EXP (product -1 i arg)))
 ))
-(define YCOS (sum
-  (product 1/2 (YEXP (product i arg)))
-  (product 1/2 (YEXP (product -1 i arg)))
+(define COS (sum
+  (product 1/2 (EXP (product i arg)))
+  (product 1/2 (EXP (product -1 i arg)))
 ))
-(define YSINH (sum
-  (product 1/2 (YEXP arg))
-  (product -1/2 (YEXP (product -1 arg)))
+(define SINH (sum
+  (product 1/2 (EXP arg))
+  (product -1/2 (EXP (product -1 arg)))
 ))
-(define YCOSH (sum
-  (product 1/2 (YEXP arg))
-  (product 1/2 (YEXP (product -1 arg)))
+(define COSH (sum
+  (product 1/2 (EXP arg))
+  (product 1/2 (EXP (product -1 arg)))
 ))
 ; for truncating products of power series
 (define POWER (cond
@@ -176,47 +176,47 @@ loop
   (t (list 'power arg1 arg2))
 ))
 (define truncate (eval (subst 'POWER 'power arg)))
-(setq tmp1 (YEXP (dot 1/2 u gammat gammax)))
-(setq tmp2 (sum
-  (product I (ycosh (product 1/2 u)))
-  (dot gammat gammax (ysinh (product 1/2 u)))
+(setq A (EXP (dot 1/2 u gammat gammax)))
+(setq B (sum
+  (product I (expcosh (product 1/2 u)))
+  (dot gammat gammax (expsinh (product 1/2 u)))
 ))
-(equal tmp1 tmp2)
-(setq tmp1 (YEXP (dot 1/2 theta gammax gammay)))
-(setq tmp2 (sum
-  (product I (ycos (product 1/2 theta)))
-  (dot gammax gammay (ysin (product 1/2 theta)))
+(equal A B)
+(setq A (EXP (dot 1/2 theta gammax gammay)))
+(setq B (sum
+  (product I (expcos (product 1/2 theta)))
+  (dot gammax gammay (expsin (product 1/2 theta)))
 ))
-(equal tmp1 tmp2)
-(setq tmp1 (truncate (dot
-  (YEXP (dot -1/2 u gammat gammaz))
+(equal A B)
+(setq A (truncate (dot
+  (EXP (dot -1/2 u gammat gammaz))
   gammat
-  (YEXP (dot 1/2 u gammat gammaz))
+  (EXP (dot 1/2 u gammat gammaz))
 )))
-(setq tmp2 (sum
-  (product gammat (ycosh u))
-  (product gammaz (ysinh u))
+(setq B (sum
+  (product gammat (expcosh u))
+  (product gammaz (expsinh u))
 ))
-(equal tmp1 tmp2)
-(setq tmp1 (truncate (dot
-  (YEXP (dot -1/2 u gammat gammaz))
+(equal A B)
+(setq A (truncate (dot
+  (EXP (dot -1/2 u gammat gammaz))
   gammaz
-  (YEXP (dot 1/2 u gammat gammaz))
+  (EXP (dot 1/2 u gammat gammaz))
 )))
-(setq tmp2 (sum
-  (product gammaz (ycosh u))
-  (product gammat (ysinh u))
+(setq B (sum
+  (product gammaz (expcosh u))
+  (product gammat (expsinh u))
 ))
-(equal tmp1 tmp2)
-(setq tmp1 (truncate (dot
-  (YEXP (dot -1/2 u gammat gammaz))
+(equal A B)
+(setq A (truncate (dot
+  (EXP (dot -1/2 u gammat gammaz))
   gammay
-  (YEXP (dot 1/2 u gammat gammaz))
+  (EXP (dot 1/2 u gammat gammaz))
 )))
-(equal tmp1 gammay)
-(setq tmp1 (truncate (dot
-  (YEXP (dot -1/2 u gammat gammaz))
+(equal A gammay)
+(setq A (truncate (dot
+  (EXP (dot -1/2 u gammat gammaz))
   gammax
-  (YEXP (dot 1/2 u gammat gammaz))
+  (EXP (dot 1/2 u gammat gammaz))
 )))
-(equal tmp1 gammax)
+(equal A gammax)
