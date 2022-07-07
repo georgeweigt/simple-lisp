@@ -1,5 +1,3 @@
-; intermediate function (xi r) is used for stability
-
 ; metric tensor
 
 (setq gtt (product -1 (xi r)))
