@@ -53,7 +53,7 @@
 
 ; ricci scalar
 
-(setq R (contract 1 2 (contract 2 3 (product guu RDD))))
+(setq R (contract 1 2 (dot guu RDD)))
 
 ; einstein tensor
 
