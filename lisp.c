@@ -866,7 +866,7 @@ eval_load(U *p)
 	if (isstr(p))
 		load(p->u.str);
 	else
-		printf("bad file name, string expected\n");
+		printf("* bad file name, string expected\n");
 	return nothing;
 }
 
@@ -877,7 +877,7 @@ load(char *s)
 	FILE *f = infile;
 	infile = fopen(s, "r");
 	if (infile == NULL) {
-		printf("cannot open file %s\n", s);
+		printf("* cannot open file %s\n", s);
 		infile = f;
 		return;
 	}
@@ -1562,7 +1562,7 @@ read_expr(int c)
 	U *p;
 
 	while (c == ')' || c == '.') {
-		printf("discarding unexpected %c\n", c);
+		printf("* discarding unexpected %c\n", c);
 		c = read_token();
 	}
 
@@ -1587,7 +1587,7 @@ read_expr(int c)
 		} else
 			p = nil;
 		if (c != ')')
-			printf("missing )\n");
+			printf("* missing )\n");
 		for (i = 0; i < n; i++)
 			p = cons(stack[tos - i - 1].p, p);
 		tos -= n;
@@ -1649,7 +1649,7 @@ read_token(void)
 		for (i = 0; i < BUF; i++) {
 			c = fgetc(infile);
 			if (c == EOF) {
-				printf("unexpected end of file\n");
+				printf("* unexpected end of file\n");
 				break;
 			}
 			if (c == '\"')
@@ -1701,7 +1701,7 @@ scann(char *s)
 	}
 
 	if (!isdigit(*s)) {
-		printf("syntax error in number\n");
+		printf("* syntax error in number\n");
 		return nil;
 	}
 
@@ -1720,7 +1720,7 @@ scann(char *s)
 	}
 
 	if (*s) {
-		printf("syntax error in number\n");
+		printf("* syntax error in number\n");
 		return nil;
 	}
 

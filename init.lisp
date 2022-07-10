@@ -474,27 +474,27 @@
 
 ; compute g, guu, GAMUDD, RUDDD, RDD, R, GDD, GUD and GUU from gdd
 
-(define gr (prog (tmp tmp1 tmp2)
+(define gr (prog ()
   (setq g (determinant gdd x0 x1 x2 x3))
   (setq guu (product (power g -1) (adjunct gdd x0 x1 x2 x3)))
   ; connection coefficients
-  (setq tmp (gradient gdd))
-  (setq GAMUDD (contract23 (product 1/2 guu (sum
-    tmp
-    (transpose23 tmp)
-    (product -1 (transpose12 (transpose23 tmp)))
-  ))))
+  (setq gddd (gradient gdd))
+  (setq GAMUDD (dot 1/2 guu (sum
+    gddd
+    (transpose23 gddd)
+    (product -1 (transpose12 (transpose23 gddd)))
+  )))
   ; riemann tensor
-  (setq tmp1 (gradient GAMUDD))
-  (setq tmp2 (contract24 (product GAMUDD GAMUDD)))
+  (setq GAMUDDD (gradient GAMUDD))
+  (setq GAMGAM (contract24 (product GAMUDD GAMUDD)))
   (setq RUDDD (sum
-    (transpose34 tmp1)
-    (product -1 tmp1)
-    (transpose23 tmp2)
-    (product -1 (transpose34 (transpose23 tmp2)))
+    (transpose34 GAMUDDD)
+    (product -1 GAMUDDD)
+    (transpose23 GAMGAM)
+    (product -1 (transpose34 (transpose23 GAMGAM)))
   ))
   (setq RDD (contract13 RUDDD)) ; ricci tensor
-  (setq R (contract12 (contract23 (product guu RDD)))) ; ricci scalar
+  (setq R (contract12 (dot guu RDD))) ; ricci scalar
   (setq GDD (sum RDD (product -1/2 gdd R))) ; einstein tensor
   (setq GUD (contract23 (product guu GDD))) ; raise 1st index
   (setq GUU (contract23 (product GUD guu))) ; raise 2nd index
